@@ -1,0 +1,30 @@
+try %{ 
+
+    # suggested mappings
+
+    map global user t ": evaluate-commands -draft table-align<ret>" -docstring "align table"
+    map global user a ": evaluate-commands -draft table-add-row-below<ret>" -docstring "add tanle add row bellow"
+    
+    # map global user t ": table-enable<ret>" -docstring "enable table mode"
+    # map global user T ": table-disable<ret>" -docstring "disable table mode"
+    
+    # map global user t ": table-toggle<ret>" -docstring "toggle table mode"
+    
+    # map global user t ": enter-user-mode table<ret>" -docstring "table"
+    # map global user T ": enter-user-mode -lock table<ret>" -docstring "table (lock)"
+ } catch %{
+    echo -debug "Error while evaluating 'kakoune-table' configuration: %val{error}"
+
+    set-option -add current plug_conf_errors "Error while evaluating 'kakoune-table' configuration:"
+    set-option -add current plug_conf_errors %sh{ printf "\n    " }
+    set-option -add current plug_conf_errors %val{error}
+    set-option -add current plug_conf_errors %sh{ printf "\n\n" }
+
+    hook -once -group plug-conf-err global WinDisplay .* %{
+        info -style modal -title "plug.kak error" "%opt{plug_conf_errors}"
+        on-key %{
+            info -style modal
+            execute-keys -with-maps -with-hooks %val{key}
+        }
+    }
+}
