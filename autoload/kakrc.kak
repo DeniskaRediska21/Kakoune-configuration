@@ -44,6 +44,10 @@ plug "listentolist/kakoune-table" domain "gitlab.com" config %{
     # map global user T ": enter-user-mode -lock table<ret>" -docstring "table (lock)"
 }
 
+plug "kakoune-lsp/kakoune-lsp" do %{
+    cargo install --locked --force --path .
+}
+
 hook global InsertCompletionShow .* %{
     try %{
         # this command temporarily removes cursors preceded by whitespace;
